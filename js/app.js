@@ -18,7 +18,7 @@ var initalization = {
 		request.onreadystatechange = function() {
   			if(this.readyState === 4 && this.status === 200) { 
 				files = JSON.parse(this.responseText);
-				populate.gallery(files);
+				gallery.populate(files);
 			} 
 			else if (this.readyState !== 4 || this.status !== 200){
 				document.getElementById("gallery").innerHTML = '<div class="alert alert-danger">' + this.readyState + ' ' + this.status + '</div>';
@@ -33,13 +33,12 @@ var initalization = {
 };
 
 // ******************
-// Page Build Object
+// Gallery Object
 // ******************
-
-var populate = {
+var gallery = {
 
 	// This function creates the gallery of items
-	gallery: function(files){
+	populate: function(files){
 
 		// Clear the gallery of all previous elements
 		document.getElementById("gallery").innerHTML = "";
@@ -51,7 +50,7 @@ var populate = {
 
 			var imageWrapper  = document.createElement("DIV");
 			imageWrapper.setAttribute("class", "col-xs-12 col-sm-6 col-md-4 image-wrapper");
-			imageWrapper.setAttribute("onclick", `populate.overlay(${i})`);
+			imageWrapper.setAttribute("onclick", `overlay.populate(${i})`);
 			imageWrapper.innerHTML = image;
 
 			var imageTitle = document.createElement("DIV");
@@ -68,7 +67,13 @@ var populate = {
 
 			document.getElementById("gallery").appendChild(imageWrapper);
 		}
-	},
+	}
+};
+
+// ******************
+// Overlay Object
+// ******************
+var overlay = {
 
 	// globals that must persist for the overlay function
 	currentGroup: null,
@@ -76,7 +81,7 @@ var populate = {
 	savedInterval: 0,
 
 	// This function  builds the overlay that is seen when an item in the gallery is clicked on.
-	overlay: function(group){
+	populate: function(group){
 
 		currentGroup = group;
 		currentImage = 0;
@@ -91,7 +96,7 @@ var populate = {
 			document.getElementById("overlay-bottom").classList.remove("active");
 			document.getElementById("overlay-top").classList.remove("active");
 			document.getElementById("image-list").innerHTML = "";
-			clearInterval(populate.savedInterval);
+			clearInterval(overlay.savedInterval);
 			currentGroup = null;
 			currentImage = 0;
 		}
@@ -100,7 +105,8 @@ var populate = {
 		document.getElementById("overlay-bottom").onclick = function(){
 			document.getElementById("overlay-bottom").classList.remove("active");
 			document.getElementById("overlay-top").classList.remove("active");
-			document.getElementById("image-list").innerHTML = "";	
+			document.getElementById("image-list").innerHTML = "";
+			clearInterval(overlay.savedInterval);	
 			currentGroup = null;
 			currentImage = 0;
 		}
@@ -116,11 +122,11 @@ var populate = {
 		}
 
 		document.getElementById("overlay-image").innerHTML = 
-		   `<img src="${files.groups[group].thumbnail.href}" alt="${files.groups[group].thumbnail.href}"/>\
-			<div class="image-prev" id="image-prev" onclick="cb.prevImage()">\
+		   `<img src="${files.groups[group].thumbnail.href}" alt=""/>\
+			<div class="image-prev" id="image-prev" onclick="overlay.prevImage()">\
 				<i class="fa fa-angle-left"></i>\
 			</div>\
-			<div class="image-next" id="image-next" onclick="cb.nextImage()">\
+			<div class="image-next" id="image-next" onclick="overlay.nextImage()">\
 				<i class="fa fa-angle-right"></i>\
 			</div><ul class="circles" id="circles"></ul>`;
 
@@ -129,37 +135,30 @@ var populate = {
 				document.getElementById("circles").innerHTML += 
 				   `<li class="active" id="circle-item-${i}">\
 						<i class="fa fa-circle"></i>\
-						<i class="fa fa-circle-o" onclick="cb.goToImage(${i});"></i>\
+						<i class="fa fa-circle-o" onclick="overlay.goToImage(${i});"></i>\
 					</li>`;
 
 				document.getElementById("image-list").innerHTML += 
 				    `<li class="image-list-item" id="image-list-item">\
-				    	<img class="active image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="${files.groups[currentGroup].images[i].href}" onclick="cb.goToImage(${i})"/>\
+				    	<img class="active image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="" onclick="overlay.goToImage(${i})"/>\
 				    </li>`;
 			}
 			else{
 				document.getElementById("circles").innerHTML += 
 				   `<li class="" id="circle-item-${i}">\
 						<i class="fa fa-circle"></i>\
-						<i class="fa fa-circle-o" onclick="cb.goToImage(${i})"></i>\
+						<i class="fa fa-circle-o" onclick="overlay.goToImage(${i})"></i>\
 					</li>`;
 
 				document.getElementById("image-list").innerHTML += 
 				   `<li class="image-list-item" id="image-list-item">\
-						<img class="image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="${files.groups[currentGroup].images[i].href}" onclick="cb.goToImage(${i})"/>\
+						<img class="image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="${files.groups[currentGroup].images[i].href}" onclick="overlay.goToImage(${i})"/>\
 					</li>`;
 			}
 		}
 
-		populate.savedInterval = setInterval(function(){ cb.nextImage(); }, 7000);
-	}
-};
-
-// ******************
-// Callbacks Object
-// ******************
-
-var cb = {
+		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
+	},
 
 	// This function:
 	// Shows the previous alt image on the overlay
@@ -186,8 +185,8 @@ var cb = {
 		document.querySelector(`#circle-item-${currentImage}`).classList.add("active");
 		document.querySelector(`.image-list-item-${currentImage}`).classList.add("active");
 
-		clearInterval(populate.savedInterval);
-		populate.savedInterval = setInterval(function(){ cb.nextImage(); }, 7000);
+		clearInterval(overlay.savedInterval);
+		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
 	},
 
 	// This function:
@@ -214,8 +213,8 @@ var cb = {
 		document.querySelector(`#circle-item-${currentImage}`).classList.add("active");
 		document.querySelector(`#image-list-item .image-list-item-${currentImage}`).classList.add("active");
 
-		clearInterval(populate.savedInterval);
-		populate.savedInterval = setInterval(function(){ cb.nextImage(); }, 7000);
+		clearInterval(overlay.savedInterval);
+		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
 	},
 
 	// This image shows a specific image on the overlay
@@ -228,8 +227,8 @@ var cb = {
 		document.querySelector(`#circle-item-${num}`).classList.add("active");
 		document.querySelector(`.image-list-item-${num}`).classList.add("active");
 
-		clearInterval(populate.savedInterval);
-		populate.savedInterval = setInterval(function(){ cb.nextImage(); }, 7000);
+		clearInterval(overlay.savedInterval);
+		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
 	}
 };
 
