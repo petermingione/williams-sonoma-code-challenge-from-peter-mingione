@@ -1,0 +1,25 @@
+/*
+Peter Mingione 
+Williams & Sonoma / West Elm Code Challenge 
+App SASS / SCSS / CSS
+
+
+*/
+
+// Include Bootstrap SASS
+@import "../bootstrap-sass-3.3.7/assets/stylesheets/bootstrap";
+
+// * {
+// 	box-sizing: border-box;
+// }
+
+// html, body, p{
+// 	margin: 0;
+// 	padding: 0;
+// }
+
+// Include gallery module
+@import "../partials/gallery";
+
+// Include overlay module
+@import "../partials/overlay";

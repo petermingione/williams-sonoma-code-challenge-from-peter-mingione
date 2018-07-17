@@ -1,0 +1,172 @@
+/*
+Peter Mingione 
+Williams & Sonoma / West Elm Code Challenge 
+App SASS / SCSS / CSS - Overlay Module
+*/
+
+.overlay-top{
+	max-width:868px;
+	width:70%;
+	padding:0 2%  2% 1%;
+	text-align:center;
+	background-color: #fff;
+	opacity: 0;
+	position:fixed;
+	top: 50%;
+	left: 50%;
+	-webkit-transition: opacity .5s ease;
+    transition: opacity .5s ease;
+	transform: translate(-50%, -50%);
+	-ms-transform: translate(-50%, -50%);
+	pointer-events: none;
+	@media screen and (max-width: 767px) {
+		width:80%;	
+	}
+	&.active{
+		opacity: 1;	
+		pointer-events:auto;		
+	}
+	.overlay-title{
+		@media screen and (max-width: 767px) {
+			padding-right:40px;
+		}
+	}
+	.overlay-close{
+		position: absolute;
+		top:0;
+		right:15px;
+		font-size:40px;
+		color:#5c6169;
+		font-weight:lighter;
+	}
+	.overlay-menu{
+		height: 55vw;
+  		max-height: 685px;
+		overflow:hidden;
+		position:relative;
+		@media screen and (max-width: 767px) {
+			height: auto;
+  			max-height: none;
+		}
+		.up-arrow,
+		.down-arrow{
+			color:#fff;
+			background-color:#5c6169;
+			font-size:35px;
+			height:35px;
+			line-height:0.9;
+			margin:0 auto;
+			position: absolute;
+    		left: -10px;
+    		right: -17px;
+    		width:35px;
+    		border-radius:50%;
+    		opacity:0.35;
+		}
+		.up-arrow{
+    		top: 5px;
+    		.fa{
+    			position:relative;
+    			bottom:3px;
+    		}
+		}
+		.down-arrow{
+    		bottom: 10px;
+		}
+		ul{
+			list-style:none;
+			padding:0;
+			margin: 10px auto 0;
+			position: absolute;
+    		top: 40px;
+    		bottom: 55px;
+    		left: 0;
+    		right: -17px;
+    		overflow-y: scroll;
+			li{
+				width:100%;
+				height: 100px;
+				padding:0;
+				float: left;
+				img{
+					width:60%;
+					&.active{
+						width:60%;
+						box-shadow: inset 0 0 5px 5px #5c6169;
+    					box-shadow: 0 0 5px 5px #5c6169;
+					}
+				}
+			}
+			li:not(last-child){
+				margin: 10px 0 5px 0;
+			}
+			li:last-child{
+				margin: 10px 0 0;
+			}
+		}
+	}	
+	.overlay-image{
+		position:relative;
+		img{
+			width:100%;
+		}
+		.image-prev,
+		.image-next{
+			font-size:40px;
+			line-height:1.2;
+			position:absolute;
+			top: 50%;
+			transform: translate(-50%, 0);
+			-ms-transform: translate(-50%, 0);
+			color:#5c6169;
+			border-radius:50%;
+			background-color: #fff;
+			opacity: .6;
+			width:27px;
+		}			
+		.image-prev{
+			left:8%;
+			@media screen and (max-width: 767px) {
+			left:15%;
+			}
+		}
+		.image-next{
+			right:5%;
+		}
+		ul.circles{
+			list-style:none;
+			position:absolute;
+			bottom:0;
+			Left:15px;
+			right:15px;
+			padding:20px;
+			margin:0;
+			background-color:#5c6169;
+			opacity: .6;
+
+			li{
+				display:inline;
+				padding:0;
+				margin:0 5px 0;
+				.fa-circle,
+				.fa-circle-o{
+					color:#fff;
+				}
+				.fa-circle{
+					display:none;
+				}
+				.fa-circle-o{
+					display:inline;
+				}
+			}
+			li.active{
+				.fa-circle{
+					display:inline;
+				}
+				.fa-circle-o{
+					display:none;
+				}
+			}		
+		}			
+	}		
+}

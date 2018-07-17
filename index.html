@@ -1,0 +1,63 @@
+<!--
+Peter Mingione 
+Williams & Sonoma / West Elm Code Challenge 
+App Template 
+-->
+
+<!DOCTYPE html>
+<html lang="en-us"> 
+
+<head>
+	<title>Peter Mingione - Williams & Sonoma - West Elm Code Challenge</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!-- This tag has been strongly recommended by the Bootstrap team since at least 2014, and Bootlint, the linter authored by the twbs team (https://github.com/twbs/bootlint) continues to throw a warning when the tag is omitted. -->
+	 <meta http-equiv="X-UA-Compatible" content="IE=edge"> 
+
+	<!-- Font Awsome-->
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+			
+	<!-- app style sheet -->
+	<link rel="stylesheet" type="text/css" href="css/app.css">
+
+</head>
+
+<body class="container" ng-app="appName" ng-controller="appCtrl" id="appId">
+
+ 	<div class="wrapper">
+ 		<div class = "row">
+			<div class="gallery" id="gallery"></div>
+ 		</div>
+ 	</div>
+	<div class="overlay-bottom" id="overlay-bottom"></div>
+	<div class="overlay-top" id="overlay-top">
+		<div class="overlay-title" id="overlay-title"></div>
+		<span class="overlay-close" id="overlay-close">x</span>
+		<div class = "row">
+			<div class="col-xs-12 col-sm-10 col-sm-push-2 overlay-image" id="overlay-image"></div>	
+			<div class="col-xs-12 col-sm-2 col-sm-pull-10 overlay-menu" id="overlay-menu">
+				<div class="up-arrow" id="up-arrow"><i class="fa fa-angle-up"></i></div>
+				<ul class="image-list" id="image-list"></ul>
+				<div class="down-arrow" id="down-arrow"><i class="fa fa-angle-down"></i></div>
+			</div>
+		</div>
+	</div>
+
+<!-- jquery js -->	
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<!-- bootstrap 3 js -->	
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+<!-- attached script page -->
+<script src="js/app.js"></script>
+
+</body>
+</html>
+
+
+
+
+
+
