@@ -19,7 +19,25 @@ var initalization = {
 		request.onreadystatechange = function() {
   			if(this.readyState === 4 && this.status === 200) { 
 				files = JSON.parse(this.responseText);
+				// Add images to the image gallery
 				gallery.populate(files);
+				// Register Event Handler: Close the overlay by clicking the close box
+				document.querySelector("#overlay-close").onclick = function(){
+					overlay.close();
+				}
+				// Register Event Handler: Close the overlay by clicking the background
+				document.querySelector("#overlay-bottom").onclick = function(){
+					overlay.close();
+				}
+				// Register Event Handler: Show the previous alt image
+				document.querySelector("#image-prev").onclick = function(){
+					overlay.prevImage();	
+				}
+				// Register Event Handler: Show the next alt image
+				document.querySelector("#image-next").onclick = function(){
+					overlay.nextImage();
+				}
+
 			} 
 			else if (this.readyState !== 4 || this.status !== 200){
 				document.querySelector("#gallery").innerHTML = '<div class="alert alert-danger">state: ' + this.readyState + ' | status: ' + this.status + '</div>';
@@ -92,28 +110,6 @@ var overlay = {
 		document.querySelector("#overlay-bottom").classList.add("active");
 		document.querySelector("#overlay-top").classList.add("active");
 
-		// Close the overlay by clicking the close box
-		document.querySelector("#overlay-close").onclick = function(){
-			document.querySelector("#overlay-bottom").classList.remove("active");
-			document.querySelector("#overlay-top").classList.remove("active");
-			document.querySelector("#image-list").innerHTML = "";
-			document.querySelector("#circles").innerHTML = "";
-			clearInterval(overlay.savedInterval);
-			currentGroup = null;
-			currentImage = 0;
-		}
-
-		// Close the overlay by clicking the background
-		document.querySelector("#overlay-bottom").onclick = function(){
-			document.querySelector("#overlay-bottom").classList.remove("active");
-			document.querySelector("#overlay-top").classList.remove("active");
-			document.querySelector("#image-list").innerHTML = "";
-			document.querySelector("#circles").innerHTML = "";
-			clearInterval(overlay.savedInterval);	
-			currentGroup = null;
-			currentImage = 0;
-		}
-
 		// Scroll the thumnail menu down one image
 		document.querySelector("#down-arrow").onmousedown = function(){
 		    $("#image-list").animate({ scrollTop: "-=115px" }, 50);
@@ -159,7 +155,19 @@ var overlay = {
 		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
 	},
 
-	// This function:
+	// Callback:
+	// Closes the overlay
+	close: function(){
+		document.querySelector("#overlay-bottom").classList.remove("active");
+			document.querySelector("#overlay-top").classList.remove("active");
+			document.querySelector("#image-list").innerHTML = "";
+			document.querySelector("#circles").innerHTML = "";
+			clearInterval(overlay.savedInterval);
+			currentGroup = null;
+			currentImage = 0;
+	},
+
+	// Callback:
 	// Shows the previous alt image on the overlay
 	// Updates the circle icons at the bottom of the image
 	// and resets the slide show
@@ -188,7 +196,7 @@ var overlay = {
 		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
 	},
 
-	// This function:
+	// Callback:
 	// Shows the next alt image on the overlay
 	// Updates the circle icons at the bottom of the image
 	// and resets the slide show
@@ -216,6 +224,7 @@ var overlay = {
 		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
 	},
 
+	// Callback:
 	// This image shows a specific image on the overlay
 	goToImage: function(num){
 		document.querySelector(`#circle-item-${currentImage}`).classList.remove("active");
