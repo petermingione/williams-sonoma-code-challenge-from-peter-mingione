@@ -21,19 +21,20 @@ var initalization = {
 				files = JSON.parse(this.responseText);
 				// Add images to the image gallery
 				gallery.populate(files);
-				// Register Event Handler: Close the overlay by clicking the close box
+				// Event Listeners:
+				// Close the overlay by clicking the close box
 				document.querySelector("#overlay-close").onclick = function(){
 					overlay.close();
 				}
-				// Register Event Handler: Close the overlay by clicking the background
+				// Close the overlay by clicking the background
 				document.querySelector("#overlay-bottom").onclick = function(){
 					overlay.close();
 				}
-				// Register Event Handler: Show the previous alt image
+				// Show the previous alt image
 				document.querySelector("#image-prev").onclick = function(){
 					overlay.prevImage();	
 				}
-				// Register Event Handler: Show the next alt image
+				// Show the next alt image
 				document.querySelector("#image-next").onclick = function(){
 					overlay.nextImage();
 				}
@@ -65,10 +66,12 @@ var gallery = {
 		// This loop adds one tile to the gallery per iteration.
 		for(var i = 0; i < files.groups.length; i++){
 
-			var image = `<img src="${files.groups[i].thumbnail.href}" alt="${files.groups[i].thumbnail.href}"/>`;
+			var image = `<img src="${files.groups[i].thumbnail.href}" alt=""/>`;
 
 			var imageWrapper  = document.createElement("DIV");
 			imageWrapper.setAttribute("class", "col-xs-12 col-sm-6 col-md-4 image-wrapper");
+
+			// Add an onclick listener to each tile
 			imageWrapper.setAttribute("onclick", `overlay.populate(${i})`);
 			imageWrapper.innerHTML = image;
 
@@ -110,14 +113,14 @@ var overlay = {
 		document.querySelector("#overlay-bottom").classList.add("active");
 		document.querySelector("#overlay-top").classList.add("active");
 
-		// Scroll the thumnail menu down one image
+		// Add a onclick listener to the down arrow
 		document.querySelector("#down-arrow").onmousedown = function(){
-		    $("#image-list").animate({ scrollTop: "-=115px" }, 50);
+			overlay.scrollThumbnailsDown();	    
 		}
 
-		// Scroll the thumnail menu up one image
+		// Add a onclick listener to the up arrow
 		document.querySelector("#up-arrow").onmousedown = function(){
-		   $("#image-list").animate({ scrollTop: "+=115px" }, 50);
+			overlay.scrollThumbnailsUp();	   
 		}
 
 		// Add the main image to the overlay
@@ -125,6 +128,7 @@ var overlay = {
 
 		// This loop adds the circles to the bottom of the overlay image
 		// It also adds the thumbnail images to the image gallery
+		// It also adds a onclick listener to each image and to each circle
 		for(var i=0; i<files.groups[group].images.length; i++){
 			if(i == 0){
 				document.querySelector("#circles").innerHTML += 
@@ -225,7 +229,7 @@ var overlay = {
 	},
 
 	// Callback:
-	// This image shows a specific image on the overlay
+	// This function shows a specific image on the overlay
 	goToImage: function(num){
 		document.querySelector(`#circle-item-${currentImage}`).classList.remove("active");
 		document.querySelector(`.image-list-item-${currentImage}`).classList.remove("active");
@@ -237,6 +241,18 @@ var overlay = {
 
 		clearInterval(overlay.savedInterval);
 		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
+	},
+
+	// Callback:
+	// This function scrolls the thumbnail gallery down
+	scrollThumbnailsDown: function(){
+		$("#image-list").animate({ scrollTop: "+=115px" }, 50);
+	},
+
+	// Callback:
+	// This function scrolls the thumbnail gallery up
+	scrollThumbnailsUp: function(){
+		$("#image-list").animate({ scrollTop: "-=115px" }, 50);
 	}
 };
 
