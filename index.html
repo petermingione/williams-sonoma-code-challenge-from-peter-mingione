@@ -35,7 +35,15 @@ App Template
 		<div class="overlay-title" id="overlay-title"></div>
 		<span class="overlay-close" id="overlay-close">x</span>
 		<div class = "row">
-			<div class="col-xs-12 col-sm-10 col-sm-push-2 overlay-image" id="overlay-image"></div>	
+			<div class="col-xs-12 col-sm-10 col-sm-push-2 overlay-image" id="overlay-image">
+				<img src="" alt=""/>
+				<div class="image-prev" id="image-prev" onclick="overlay.prevImage()">
+					<i class="fa fa-angle-left"></i>
+				</div>
+				<div class="image-next" id="image-next" onclick="overlay.nextImage()">
+					<i class="fa fa-angle-right"></i>
+				</div><ul class="circles" id="circles"></ul>
+		</div>	
 			<div class="col-xs-12 col-sm-2 col-sm-pull-10 overlay-menu" id="overlay-menu">
 				<div class="up-arrow" id="up-arrow"><i class="fa fa-angle-up"></i></div>
 				<ul class="image-list" id="image-list"></ul>

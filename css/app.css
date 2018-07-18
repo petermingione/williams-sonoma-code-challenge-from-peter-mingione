@@ -5818,6 +5818,9 @@ Peter Mingione
 Williams & Sonoma / West Elm Code Challenge 
 App SASS / SCSS / CSS - Gallery Module
 */
+.gallery .alert {
+  text-align: center;
+  margin-top: 20px; }
 .gallery .image-wrapper {
   position: relative;
   margin: 15px 0;

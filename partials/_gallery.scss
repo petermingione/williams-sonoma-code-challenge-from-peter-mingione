@@ -5,6 +5,10 @@ App SASS / SCSS / CSS - Gallery Module
 */
 
 .gallery{
+	.alert{
+		text-align:center;
+		margin-top: 20px;
+	}
 	.image-wrapper{
 		position:relative;
 		margin:15px 0;

@@ -10,7 +10,8 @@ App Javascript
 var initalization = {
 	// json returned from the ajax call
 	files: {},
-	// The .json api was giving me a Cross-Origin Request error so I added the json to the project folder.
+	
+	// Load the model data
 	start: function(){
 		// Ajax Request Object
 		request = new XMLHttpRequest(),
@@ -21,11 +22,11 @@ var initalization = {
 				gallery.populate(files);
 			} 
 			else if (this.readyState !== 4 || this.status !== 200){
-				document.getElementById("gallery").innerHTML = '<div class="alert alert-danger">' + this.readyState + ' ' + this.status + '</div>';
+				document.querySelector("#gallery").innerHTML = '<div class="alert alert-danger">state: ' + this.readyState + ' | status: ' + this.status + '</div>';
 			} 
 		}
 		// Open an ajax request
-    	//request.open('GET', 'https://www.westelm.com/services/catalog/v4/category/shop/new/all-new/index.json');
+    	// request.open('GET', 'https://www.westelm.com/services/catalog/v4/category/shop/new/all-new/index.json');
 		request.open('GET', 'app.php');
 		// Send the ajax request
 		request.send(null);
@@ -41,9 +42,9 @@ var gallery = {
 	populate: function(files){
 
 		// Clear the gallery of all previous elements
-		document.getElementById("gallery").innerHTML = "";
+		document.querySelector("#gallery").innerHTML = "";
 
-		// This loop adds one tile to the gallery per iteration
+		// This loop adds one tile to the gallery per iteration.
 		for(var i = 0; i < files.groups.length; i++){
 
 			var image = `<img src="${files.groups[i].thumbnail.href}" alt="${files.groups[i].thumbnail.href}"/>`;
@@ -65,7 +66,7 @@ var gallery = {
 			price.classList.add("price");
 			imageWrapper.appendChild(price);
 
-			document.getElementById("gallery").appendChild(imageWrapper);
+			document.querySelector("#gallery").appendChild(imageWrapper);
 		}
 	}
 };
@@ -75,7 +76,7 @@ var gallery = {
 // ******************
 var overlay = {
 
-	// globals that must persist for the overlay function
+	// globals that must persist between calls to the populate method.
 	currentGroup: null,
 	currentImage: 0,
 	savedInterval: 0,
@@ -86,73 +87,71 @@ var overlay = {
 		currentGroup = group;
 		currentImage = 0;
 
-		document.getElementById("overlay-title").innerHTML = "<h3>" + files.groups[group].name + "</h3>";
+		document.querySelector("#overlay-title").innerHTML = "<h3>" + files.groups[group].name + "</h3>";
 
-		document.getElementById("overlay-bottom").classList.add("active");
-		document.getElementById("overlay-top").classList.add("active");
+		document.querySelector("#overlay-bottom").classList.add("active");
+		document.querySelector("#overlay-top").classList.add("active");
 
 		// Close the overlay by clicking the close box
-		document.getElementById("overlay-close").onclick = function(){
-			document.getElementById("overlay-bottom").classList.remove("active");
-			document.getElementById("overlay-top").classList.remove("active");
-			document.getElementById("image-list").innerHTML = "";
+		document.querySelector("#overlay-close").onclick = function(){
+			document.querySelector("#overlay-bottom").classList.remove("active");
+			document.querySelector("#overlay-top").classList.remove("active");
+			document.querySelector("#image-list").innerHTML = "";
+			document.querySelector("#circles").innerHTML = "";
 			clearInterval(overlay.savedInterval);
 			currentGroup = null;
 			currentImage = 0;
 		}
 
 		// Close the overlay by clicking the background
-		document.getElementById("overlay-bottom").onclick = function(){
-			document.getElementById("overlay-bottom").classList.remove("active");
-			document.getElementById("overlay-top").classList.remove("active");
-			document.getElementById("image-list").innerHTML = "";
+		document.querySelector("#overlay-bottom").onclick = function(){
+			document.querySelector("#overlay-bottom").classList.remove("active");
+			document.querySelector("#overlay-top").classList.remove("active");
+			document.querySelector("#image-list").innerHTML = "";
+			document.querySelector("#circles").innerHTML = "";
 			clearInterval(overlay.savedInterval);	
 			currentGroup = null;
 			currentImage = 0;
 		}
 
 		// Scroll the thumnail menu down one image
-		document.getElementById("down-arrow").onmousedown = function(){
+		document.querySelector("#down-arrow").onmousedown = function(){
 		    $("#image-list").animate({ scrollTop: "-=115px" }, 50);
 		}
 
 		// Scroll the thumnail menu up one image
-		document.getElementById("up-arrow").onmousedown = function(){
+		document.querySelector("#up-arrow").onmousedown = function(){
 		   $("#image-list").animate({ scrollTop: "+=115px" }, 50);
 		}
 
-		document.getElementById("overlay-image").innerHTML = 
-		   `<img src="${files.groups[group].thumbnail.href}" alt=""/>\
-			<div class="image-prev" id="image-prev" onclick="overlay.prevImage()">\
-				<i class="fa fa-angle-left"></i>\
-			</div>\
-			<div class="image-next" id="image-next" onclick="overlay.nextImage()">\
-				<i class="fa fa-angle-right"></i>\
-			</div><ul class="circles" id="circles"></ul>`;
+		// Add the main image to the overlay
+		document.querySelector("#overlay-image img").src = `${files.groups[group].thumbnail.href}`;
 
+		// This loop adds the circles to the bottom of the overlay image
+		// It also adds the thumbnail images to the image gallery
 		for(var i=0; i<files.groups[group].images.length; i++){
 			if(i == 0){
-				document.getElementById("circles").innerHTML += 
+				document.querySelector("#circles").innerHTML += 
 				   `<li class="active" id="circle-item-${i}">\
 						<i class="fa fa-circle"></i>\
 						<i class="fa fa-circle-o" onclick="overlay.goToImage(${i});"></i>\
 					</li>`;
 
-				document.getElementById("image-list").innerHTML += 
+				document.querySelector("#image-list").innerHTML += 
 				    `<li class="image-list-item" id="image-list-item">\
 				    	<img class="active image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="" onclick="overlay.goToImage(${i})"/>\
 				    </li>`;
 			}
 			else{
-				document.getElementById("circles").innerHTML += 
+				document.querySelector("#circles").innerHTML += 
 				   `<li class="" id="circle-item-${i}">\
 						<i class="fa fa-circle"></i>\
 						<i class="fa fa-circle-o" onclick="overlay.goToImage(${i})"></i>\
 					</li>`;
 
-				document.getElementById("image-list").innerHTML += 
+				document.querySelector("#image-list").innerHTML += 
 				   `<li class="image-list-item" id="image-list-item">\
-						<img class="image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="${files.groups[currentGroup].images[i].href}" onclick="overlay.goToImage(${i})"/>\
+						<img class="image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="" onclick="overlay.goToImage(${i})"/>\
 					</li>`;
 			}
 		}
@@ -163,7 +162,7 @@ var overlay = {
 	// This function:
 	// Shows the previous alt image on the overlay
 	// Updates the circle icons at the bottom of the image
-	// Resets the slide show
+	// and resets the slide show
 	prevImage: function(){
 
 		document.querySelector(`#circle-item-${currentImage}`).classList.remove("active");
@@ -192,7 +191,7 @@ var overlay = {
 	// This function:
 	// Shows the next alt image on the overlay
 	// Updates the circle icons at the bottom of the image
-	// Resets the slide show
+	// and resets the slide show
 	nextImage: function(){
 
 		document.querySelector(`#circle-item-${currentImage}`).classList.remove("active");
