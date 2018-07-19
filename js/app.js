@@ -23,19 +23,19 @@ var initalization = {
 				gallery.populate(files);
 				// Event Listeners:
 				// Close the overlay by clicking the close box
-				document.querySelector("#overlay-close").onclick = function(){
+				document.querySelector("#overlay-close").onclick = () => {
 					overlay.close();
 				}
 				// Close the overlay by clicking the background
-				document.querySelector("#overlay-bottom").onclick = function(){
+				document.querySelector("#overlay-bottom").onclick = () => {
 					overlay.close();
 				}
 				// Show the previous alt image
-				document.querySelector("#image-prev").onclick = function(){
+				document.querySelector("#image-prev").onclick = () => {
 					overlay.prevImage();	
 				}
 				// Show the next alt image
-				document.querySelector("#image-next").onclick = function(){
+				document.querySelector("#image-next").onclick = () => {
 					overlay.nextImage();
 				}
 
@@ -114,12 +114,12 @@ var overlay = {
 		document.querySelector("#overlay-top").classList.add("active");
 
 		// Add a onclick listener to the down arrow
-		document.querySelector("#down-arrow").onmousedown = function(){
+		document.querySelector("#down-arrow").onmousedown = () => {
 			overlay.scrollThumbnailsDown();	    
 		}
 
 		// Add a onclick listener to the up arrow
-		document.querySelector("#up-arrow").onmousedown = function(){
+		document.querySelector("#up-arrow").onmousedown = () => {
 			overlay.scrollThumbnailsUp();	   
 		}
 
@@ -130,33 +130,35 @@ var overlay = {
 		// It also adds the thumbnail images to the image gallery
 		// It also adds a onclick listener to each image and to each circle
 		for(var i=0; i<files.groups[group].images.length; i++){
-			if(i == 0){
-				document.querySelector("#circles").innerHTML += 
-				   `<li class="active" id="circle-item-${i}">\
-						<i class="fa fa-circle"></i>\
-						<i class="fa fa-circle-o" onclick="overlay.goToImage(${i});"></i>\
-					</li>`;
 
-				document.querySelector("#image-list").innerHTML += 
-				    `<li class="image-list-item" id="image-list-item">\
-				    	<img class="active image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="" onclick="overlay.goToImage(${i})"/>\
-				    </li>`;
-			}
-			else{
-				document.querySelector("#circles").innerHTML += 
-				   `<li class="" id="circle-item-${i}">\
-						<i class="fa fa-circle"></i>\
-						<i class="fa fa-circle-o" onclick="overlay.goToImage(${i})"></i>\
-					</li>`;
-
-				document.querySelector("#image-list").innerHTML += 
-				   `<li class="image-list-item" id="image-list-item">\
-						<img class="image-list-item-${i}" src="${files.groups[currentGroup].images[i].href}" alt="" onclick="overlay.goToImage(${i})"/>\
-					</li>`;
-			}
+			var faCircle = document.createElement("I");
+			faCircle.classList.add("fa");
+			faCircle.classList.add("fa-circle");
+			var faCircleO = document.createElement("I");
+			faCircleO.classList.add("fa");
+			faCircleO.classList.add("fa-circle-o");
+			faCircleO.setAttribute("onclick", `overlay.goToImage(${i});`);
+			var circleItem = document.createElement("LI");
+			if(i == 0){ circleItem.classList.add("active"); }
+			circleItem.setAttribute("id", `circle-item-${i}`);
+			circleItem.appendChild(faCircle);
+			circleItem.appendChild(faCircleO);
+			document.querySelector("#circles").appendChild(circleItem);
+			
+			var image = document.createElement("IMG");
+			if (i == 0){ image.classList.add("active"); }
+			image.classList.add(`image-list-item-${i}`);
+			image.setAttribute("src", `${files.groups[currentGroup].images[i].href}`);
+			image.setAttribute("onclick", `overlay.goToImage(${i})`);
+			var imageListItem = document.createElement("LI");
+			imageListItem.classList.add("image-list-item");
+			imageListItem.setAttribute("id", "image-list-item");
+			imageListItem.appendChild(image);
+			document.querySelector("#image-list").appendChild(imageListItem);
+			
 		}
 
-		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
+		overlay.savedInterval = setInterval( () => { overlay.nextImage(); } , 7000);
 	},
 
 	// Callback:
@@ -197,7 +199,7 @@ var overlay = {
 		document.querySelector(`.image-list-item-${currentImage}`).classList.add("active");
 
 		clearInterval(overlay.savedInterval);
-		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
+		overlay.savedInterval = setInterval( () => { overlay.nextImage(); } , 7000);
 	},
 
 	// Callback:
@@ -225,7 +227,7 @@ var overlay = {
 		document.querySelector(`#image-list-item .image-list-item-${currentImage}`).classList.add("active");
 
 		clearInterval(overlay.savedInterval);
-		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
+		overlay.savedInterval = setInterval( () => { overlay.nextImage(); } , 7000);
 	},
 
 	// Callback:
@@ -240,18 +242,18 @@ var overlay = {
 		document.querySelector(`.image-list-item-${num}`).classList.add("active");
 
 		clearInterval(overlay.savedInterval);
-		overlay.savedInterval = setInterval(function(){ overlay.nextImage(); }, 7000);
+		overlay.savedInterval = setInterval( () => { overlay.nextImage(); } , 7000);
 	},
 
 	// Callback:
 	// This function scrolls the thumbnail gallery down
-	scrollThumbnailsDown: function(){
+	scrollThumbnailsDown: () => {
 		$("#image-list").animate({ scrollTop: "+=115px" }, 50);
 	},
 
 	// Callback:
 	// This function scrolls the thumbnail gallery up
-	scrollThumbnailsUp: function(){
+	scrollThumbnailsUp: () => {
 		$("#image-list").animate({ scrollTop: "-=115px" }, 50);
 	}
 };
