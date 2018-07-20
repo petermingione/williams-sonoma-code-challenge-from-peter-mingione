@@ -220,7 +220,7 @@ var overlay = {
 			currentImage = 0;
 		}
 		else{
-			document.querySelector(`#overlay-image img`).src = files.groups[currentGroup].images[0].href;
+			document.querySelector("#overlay-image img").src = files.groups[currentGroup].images[0].href;
 		}
 
 		document.querySelector(`#circle-item-${currentImage}`).classList.add("active");
